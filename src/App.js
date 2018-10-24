@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import isElectron from 'is-electron';
+import XLSX from 'xlsx';
+
+let ipcRenderer;
+if (isElectron()) {
+	ipcRenderer = window.require('electron').ipcRenderer;	
+}
 
 class App extends Component {
+  componentDidMount() {
+    if (isElectron()) {
+      ipcRenderer.send('get-master-workbook');
+      ipcRenderer.on('got-master-workbook', (event, workbook) => {
+        console.log(workbook.Sheets['Help Instruction']);
+        const helpInstructions = workbook.Sheets['Help Instruction'];
+        const newWorkbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(newWorkbook, helpInstructions, 'Help Instruction');
+        ipcRenderer.send('save-new-workbook', newWorkbook);
+        ipcRenderer.on('saved-new-workbook', () => {
+          console.log('created new file');
+        })
+      })
+    }
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        Hello
       </div>
     );
   }
