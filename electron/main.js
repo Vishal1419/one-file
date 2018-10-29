@@ -3,9 +3,11 @@ const electron = require('electron');
 const { app, BrowserWindow, ipcMain, dialog } = electron;
 
 const path = require('path');
-const url = require('url');
+const fs = require('fs');
 
+const Parser = require('node-dbf').default;
 const XLSX = require('xlsx');
+const { add_cell_to_sheet } = require('./xlsx-helper-functions');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -28,15 +30,64 @@ function createWindow() {
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
 
-    ipcMain.on('get-master-workbook', (event) => {
-      const workbook = XLSX.readFile(path.resolve('./sample-files/test.xlsx'))
-      event.sender.send('got-master-workbook', workbook);
-    });
-
-    ipcMain.on('save-new-workbook', (event, newWorkbook) => {
-      XLSX.writeFile(newWorkbook, path.resolve('./sample-files/new.xlsx'));
-      event.sender.send('saved-new-workbook');
-    });
+    ipcMain.on('create-one-file', (event, additionalColumns = [], startingRowNo = 5) => {
+			dialog.showOpenDialog({
+				filters: [
+					{ name: 'CSV Files', extensions: ['csv'] }
+				],
+				properties: ['openFile', 'multiSelections']
+			}, (fileNames) => {
+				if (fileNames) {
+					fs.copyFile(path.join(__dirname, '../sample-files/test.xlsx'), 'D:/test.xlsx', () => {
+						const workbook = XLSX.readFile('D:/test.xlsx');
+						fileNames.forEach((fileName, rowIndex) => {
+							const parser = new Parser(fileName, { encoding: 'utf-8' });
+							let worksheet;
+							let noOfColumns = 0;
+							parser.on('start', () => {
+								try {
+									worksheet = workbook.Sheets[path.parse(fileName).name.toLowerCase()];
+									console.log(path.parse(fileName).name);
+									if (worksheet) {
+										noOfColumns = XLSX.utils.decode_range(worksheet['!ref']).e.c;
+									}
+								} catch (_) {
+									console.log(_); // please select a valid file
+								}
+							});
+							parser.on('header', (header) => {
+								// console.log('header', header);
+							});
+							parser.on('record', (record) => {
+								let cells = [...additionalColumns, ...Object.values(record)];
+								cells.shift();
+								cells.shift();
+								let isNull = true;
+								cells.forEach((cell, columnIndex) => {
+									if (columnIndex < noOfColumns && cell) {
+										isNull = false;
+									}
+								});
+								if (!isNull) {
+									cells.forEach((cell, columnIndex) => {
+										if (columnIndex < noOfColumns) {
+											if (!cell || isNaN(cell)) cell = "abc";
+											console.log(cell);
+											add_cell_to_sheet(worksheet, XLSX.utils.encode_cell({ c: columnIndex, r: rowIndex + startingRowNo }), cell);
+										}
+									});
+								}
+							});
+							parser.on('end', () => {
+								XLSX.write(workbook);
+								console.log('file end');
+							});
+							parser.parse();
+						})
+					});
+				}
+			});
+		});
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
