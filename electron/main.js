@@ -6,8 +6,8 @@ const path = require('path');
 const fs = require('fs');
 
 const Parser = require('node-dbf').default;
-const XLSX = require('xlsx');
-const { add_cell_to_sheet } = require('./xlsx-helper-functions');
+const XLSX = require('xlsx-populate');
+// const { add_cell_to_sheet } = require('./xlsx-helper-functions');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -39,50 +39,54 @@ function createWindow() {
 			}, (fileNames) => {
 				if (fileNames) {
 					fs.copyFile(path.join(__dirname, '../sample-files/test.xlsx'), 'D:/test.xlsx', () => {
-						const workbook = XLSX.readFile('D:/test.xlsx');
+						// const workbook = XLSX.readFile('D:/test.xlsx');
 						fileNames.forEach((fileName, rowIndex) => {
 							const parser = new Parser(fileName, { encoding: 'utf-8' });
 							let worksheet;
-							let noOfColumns = 0;
-							parser.on('start', () => {
-								try {
-									worksheet = workbook.Sheets[path.parse(fileName).name.toLowerCase()];
-									console.log(path.parse(fileName).name);
-									if (worksheet) {
-										noOfColumns = XLSX.utils.decode_range(worksheet['!ref']).e.c;
-									}
-								} catch (_) {
-									console.log(_); // please select a valid file
-								}
-							});
-							parser.on('header', (header) => {
-								// console.log('header', header);
-							});
-							parser.on('record', (record) => {
-								let cells = [...additionalColumns, ...Object.values(record)];
-								cells.shift();
-								cells.shift();
-								let isNull = true;
-								cells.forEach((cell, columnIndex) => {
-									if (columnIndex < noOfColumns && cell) {
-										isNull = false;
+							XLSX.fromFileAsync('D:/test.xlsx').then((workbook) => {
+								let noOfColumns = 0;
+								parser.on('start', () => {
+									try {
+										worksheet = workbook.sheet(path.parse(fileName).name.toLowerCase());
+										if (worksheet) {
+											noOfColumns = (worksheet.row(3) && worksheet.row(3)._node
+											&& worksheet.row(3)._node.children && worksheet.row(3)._node.children.length
+											&& worksheet.row(3)._node.children.length - 1) || 0;
+										}
+									} catch (err) {
+										console.log(err); // please select a valid file
 									}
 								});
-								if (!isNull) {
-									cells.forEach((cell, columnIndex) => {
-										if (columnIndex < noOfColumns) {
-											if (!cell || isNaN(cell)) cell = "abc";
-											console.log(cell);
-											add_cell_to_sheet(worksheet, XLSX.utils.encode_cell({ c: columnIndex, r: rowIndex + startingRowNo }), cell);
-										}
-									});
-								}
-							});
-							parser.on('end', () => {
-								XLSX.write(workbook);
-								console.log('file end');
-							});
-							parser.parse();
+								parser.parse();
+							})
+						// 	parser.on('header', (header) => {
+						// 		// console.log('header', header);
+						// 	});
+						// 	parser.on('record', (record) => {
+						// 		let cells = [...additionalColumns, ...Object.values(record)];
+						// 		cells.shift();
+						// 		cells.shift();
+						// 		let isNull = true;
+						// 		cells.forEach((cell, columnIndex) => {
+						// 			if (columnIndex < noOfColumns && cell) {
+						// 				isNull = false;
+						// 			}
+						// 		});
+						// 		if (!isNull) {
+						// 			cells.forEach((cell, columnIndex) => {
+						// 				if (columnIndex < noOfColumns) {
+						// 					if (!cell || isNaN(cell)) cell = "abc";
+						// 					console.log(cell);
+						// 					add_cell_to_sheet(worksheet, XLSX.utils.encode_cell({ c: columnIndex, r: rowIndex + startingRowNo }), cell);
+						// 				}
+						// 			});
+						// 		}
+						// 	});
+						// 	parser.on('end', () => {
+						// 		XLSX.write(workbook);
+						// 		console.log('file end');
+						// 	});
+						// 	parser.parse();
 						})
 					});
 				}
