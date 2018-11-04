@@ -1,0 +1,436 @@
+$rt-toast-width: 550px !default;
+$rt-toast-background: #ffffff !default;
+$rt-font-color: #000 !default;
+$rt-font-size: 13px !default;
+$rt-animation-duration: 0.75s !default;
+$rt-color-default: #fff !default;
+$rt-color-info: #dbf3f5 !default;
+$rt-color-success: #ddeec6 !default;
+$rt-color-warning: #fdf3d9 !default;
+$rt-color-error:#f8cccd !default;
+$rt-color-error-icon: #ed5257 !default;
+$rt-color-success-icon: #8dc63e !default;
+$rt-color-warning-icon: #f1c40f !default;
+$rt-color-info-icon: #3498db!default;
+$rt-color-error-content: #f8cccd !default;
+$rt-color-progress-default: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55) !default;
+$rt-smartphone-portrait: "only screen and (max-width : 480px)" !default;
+@keyframes toastify-bounceInRight {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+  from {
+    opacity: 0;
+    transform: translate3d(3000px, 0, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(-25px, 0, 0);
+  }
+  75% {
+    transform: translate3d(10px, 0, 0);
+  }
+  90% {
+    transform: translate3d(-5px, 0, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.toastify-bounceInRight {
+  animation-name: toastify-bounceInRight;
+}
+
+@keyframes toastify-bounceOutRight {
+  20% {
+    opacity: 1;
+    transform: translate3d(-20px, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(2000px, 0, 0);
+  }
+}
+
+.toastify-bounceOutRight {
+  animation-name: toastify-bounceOutRight;
+}
+
+@keyframes toastify-bounceInLeft {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+  0% {
+    opacity: 0;
+    transform: translate3d(-3000px, 0, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(25px, 0, 0);
+  }
+  75% {
+    transform: translate3d(-10px, 0, 0);
+  }
+  90% {
+    transform: translate3d(5px, 0, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.toastify-bounceInLeft {
+  animation-name: toastify-bounceInLeft;
+}
+
+@keyframes toastify-bounceOutLeft {
+  20% {
+    opacity: 1;
+    transform: translate3d(20px, 0, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(-2000px, 0, 0);
+  }
+}
+
+.toastify-bounceOutLeft {
+  animation-name: toastify-bounceOutLeft;
+}
+
+@keyframes toastify-bounceInUp {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+  from {
+    opacity: 0;
+    transform: translate3d(0, 3000px, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(0, -20px, 0);
+  }
+  75% {
+    transform: translate3d(0, 10px, 0);
+  }
+  90% {
+    transform: translate3d(0, -5px, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.toastify-bounceInUp {
+  animation-name: toastify-bounceInUp;
+}
+
+@keyframes toastify-bounceOutUp {
+  20% {
+    transform: translate3d(0, -10px, 0);
+  }
+  40%,
+  45% {
+    opacity: 1;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, -2000px, 0);
+  }
+}
+
+.toastify-bounceOutUp {
+  animation-name: toastify-bounceOutUp;
+}
+
+@keyframes toastify-bounceInDown {
+  from,
+  60%,
+  75%,
+  90%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+  }
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -3000px, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(0, 25px, 0);
+  }
+  75% {
+    transform: translate3d(0, -10px, 0);
+  }
+  90% {
+    transform: translate3d(0, 5px, 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.toastify-bounceInDown {
+  animation-name: toastify-bounceInDown;
+}
+
+@keyframes toastify-bounceOutDown {
+  20% {
+    transform: translate3d(0, 10px, 0);
+  }
+  40%,
+  45% {
+    opacity: 1;
+    transform: translate3d(0, -20px, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(0, 2000px, 0);
+  }
+}
+
+.toastify-bounceOutDown {
+  animation-name: toastify-bounceOutDown;
+}
+
+.toastify-animated {
+  animation-duration: $rt-animation-duration;
+  animation-fill-mode: both;
+}
+
+.toast-enter {
+  &--top-left,
+  &--bottom-left {
+    @extend .toastify-bounceInLeft
+  }
+  &--top-right,
+  &--bottom-right {
+    @extend .toastify-bounceInRight
+  }
+  &--top-center {
+    @extend .toastify-bounceInDown
+  }
+  &--bottom-center {
+    @extend .toastify-bounceInUp
+  }
+}
+
+.toast-exit {
+  &--top-left,
+  &--bottom-left {
+    @extend .toastify-bounceOutLeft
+  }
+  &--top-right,
+  &--bottom-right {
+    @extend .toastify-bounceOutRight
+  }
+  &--top-center {
+    @extend .toastify-bounceOutUp
+  }
+  &--bottom-center {
+    @extend .toastify-bounceOutDown
+  }
+}
+
+.toastify {
+  z-index: 3000;
+  position: fixed;
+  padding: 4px;
+  width: $rt-toast-width;
+  box-sizing: border-box;
+  color: #fff;
+  &--top-left {
+    top: 1em;
+    left: 1em;
+  }
+  &--top-center {
+    top: 1em;
+    left: 50%;
+    margin-left: -($rt-toast-width / 2);
+  }
+  &--top-right {
+    top: 1em;
+    right: 1em;
+  }
+  &--bottom-left {
+    bottom: 1em;
+    left: 1em;
+  }
+  &--bottom-center {
+    bottom: 1em;
+    left: 50%;
+    margin-left: -($rt-toast-width / 2);
+  }
+  &--bottom-right {
+    bottom: 1em;
+    right: 1em;
+  }
+}
+
+@media #{$rt-smartphone-portrait} {
+  .toastify {
+    width: 100vw;
+    padding: 0;
+  }
+  .toastify--top-left,
+  .toastify--top-center,
+  .toastify--top-right {
+    left: 0;
+    top: 0;
+    margin: 0;
+  }
+  .toastify--bottom-left,
+  .toastify--bottom-center,
+  .toastify--bottom-right {
+    left: 0;
+    bottom: 0;
+    margin: 0;
+  }
+}
+
+.toastify__close {
+  padding: 0;
+  color: #000;
+  font-weight: bold;
+  font-size: 12px;
+  background: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 28px;
+  right: 10px;
+  opacity: .7;
+  transition: .3s ease;
+  align-self: flex-start;
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+  .toastify-content--default & {
+    color: #000;
+    opacity: 0.3;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.toastify-content {
+  position: relative;
+  min-height: 48px;
+  margin-bottom: 1rem;
+  padding: 0px;
+  border-radius: 1px;
+  box-shadow: 0 1px 10px 0 rgba(0, 0, 0, .1), 0 2px 15px 0 rgba(0, 0, 0, .05);
+  display: flex;
+  justify-content: space-between;
+  max-height: 800px;
+  overflow: hidden;
+  font-family: sans-serif;
+  cursor: pointer;
+  border: none;
+  &--icon {
+    width: 60px;
+    float: left;
+    padding: 16px 0;
+    text-align: center;
+    margin-right: 10px;
+    font-size: 30px;
+    line-height: 45px;
+    i {
+      font-size: 40px;
+    }
+  }
+  &--message {
+    padding: 10px;
+    color: $rt-font-color;
+    line-height: 18px;
+    float: left;
+    width: 75%;
+  }
+  &--default {
+    background: $rt-color-default;
+    color: #aaa;
+  }
+  &--info {
+    background: $rt-color-info;
+    &-icon {
+      background: $rt-color-info-icon;
+    }
+  }
+  &--success {
+    background: $rt-color-success;
+    &-icon {
+      background: $rt-color-success-icon;
+    }
+  }
+  &--warning {
+    background: $rt-color-warning;
+    &-icon {
+      background: $rt-color-warning-icon;
+    }
+  }
+  &--error {
+    background: $rt-color-error;
+    &-icon {
+      background: $rt-color-error-icon;
+    }
+    &-message {
+      background: $rt-color-error-content;
+    }
+  }
+}
+
+.toastify__body {
+  margin: auto 0;
+  flex: 1;
+}
+
+@media #{$rt-smartphone-portrait} {
+  .toastify-content {
+    margin-bottom: 0;
+  }
+}
+
+@keyframes track-progress {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+.toastify__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 5px;
+  z-index: 999;
+  opacity: 0.7;
+  animation: track-progress linear 1;
+  background-color: rgba(255, 255, 255, .7);
+  &--default {
+    background: $rt-color-progress-default;
+  }
+  &--info {}
+  &--success {}
+  &--warning {}
+  &--error {}
+}
