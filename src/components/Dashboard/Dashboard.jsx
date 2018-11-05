@@ -13,37 +13,39 @@ const Dashboard = ({ loading, loadingMessage, createOneFile }) => (
       loader={
         <div className="waiting-loader">
           <i className="fas fa-spinner fa-pulse" />
-          <p className="loader-text">{loadingMessage || 'Hello everyone'}</p>
+          <p className="loader-text">{loadingMessage}</p>
         </div>
       }
     >
-      <button
-        type="button"
-        className="btn-gstr1"
-        onClick={() => {
-          createOneFile('GSTR1', []);
-        }}
-      >
-        GSTR1
-      </button>
-      <button
-        type="button"
-        className="btn-gstr2"
-        onClick={() => {
-          createOneFile('GSTR2', []);
-        }}
-      >
-        GSTR2
-      </button>
-      <button
-        type="button"
-        className="btn-gstr4"
-        onClick={() => {
-          createOneFile('GSTR4', [""]);
-        }}
-      >
-        GSTR4
-      </button>
+      <div className="buttons">
+        <button
+          type="button"
+          className="btn-gstr1"
+          onClick={() => {
+            createOneFile('GSTR1', []);
+          }}
+        >
+          GSTR1
+        </button>
+        <button
+          type="button"
+          className="btn-gstr2"
+          onClick={() => {
+            createOneFile('GSTR2', []);
+          }}
+        >
+          GSTR2
+        </button>
+        <button
+          type="button"
+          className="btn-gstr4"
+          onClick={() => {
+            createOneFile('GSTR4', [""]);
+          }}
+        >
+          GSTR4
+        </button>
+      </div>
     </BlockUI>
   </div>
 );

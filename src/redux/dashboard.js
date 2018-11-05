@@ -39,6 +39,7 @@ export const actions = {
   }),
   setLoadingMessage: message => ({
     type: types.SET_LOADING_MESSAGE,
+    payload: message,
   }),
   oneFileCreationCompleted: () => ({
     type: types.ONE_FILE_CREATION_COMPLETED,

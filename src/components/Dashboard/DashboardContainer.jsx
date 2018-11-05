@@ -29,9 +29,9 @@ class DashboardContainer extends Component {
         Toast.error(`${message}\n${alternateMessage}`, 'Error');
         this.props.oneFileCreationCompleted();
       });
-      ipcRenderer.on('create-one-file-success', (event, message) => {
+      ipcRenderer.on('create-one-file-success', (event, message, filePath) => {
         Toast.success(message, 'Success', () => {
-          // point to newly created file in explorer
+          ipcRenderer.send('open-explorer-window', filePath);
         });
         this.props.oneFileCreationCompleted();
       });
