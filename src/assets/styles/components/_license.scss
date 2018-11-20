@@ -1,0 +1,16 @@
+.frm-license-container {
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+  height: 100%;
+  .frm-license {
+    width: 100%;
+    .key {
+      text-transform: uppercase;
+    }
+    .btn-register-license {
+      display: block;
+      width: 100%;
+    }
+  }
+}

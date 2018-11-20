@@ -1,12 +1,22 @@
 .dashboard {
-  .buttons {
+  .gstrs {
     display: flex;
     flex-direction: column;
     height: 100%;
     justify-content: space-evenly;
     align-items: center;
-    button {
-      
+    .gstr-container {
+      cursor: pointer;
+      width: calc(100% - 32px);
+      text-align: center;
+      border-radius: 10px;
+      &:hover {
+        background-color: rgba(3, 114, 48, 0.6);
+        box-shadow: 0 0 3pt 3px rgba(3, 114, 48, 1);
+      }
+      img {
+        width: calc(100% - 32px);
+      }
     }
   }
 }

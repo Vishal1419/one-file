@@ -1,4 +1,4 @@
-const Toast = {};
+import * as Toast from '../components/Toaster/Toaster';
 
 const createAsyncAction = ({
   asyncRequest, types, loadingPayload = null, showToastOnError = true,
@@ -18,7 +18,8 @@ const createAsyncAction = ({
       return;
     }
 
-    if ([2, 3].includes(String(response.status).substring(0, 1))) { // if request succeeds
+    console.log(response);
+    if (['2', '3'].includes(String(response.status).substring(0, 1))) { // if request succeeds
       try {
         const jsonResponse = await response.json();
         if (jsonResponse.statusCode === 1000) {
@@ -32,11 +33,12 @@ const createAsyncAction = ({
           type: types.failure,
           payload: {
             code: jsonResponse.statusCode,
-            message: jsonResponse.message,
+            message: jsonResponse.error,
           },
         });
         if (showToastOnError) {
-          Toast.error(`${jsonResponse.statusCode}: ${jsonResponse.message}`);
+          console.log(jsonResponse);
+          Toast.error(`${jsonResponse.statusCode}: ${jsonResponse.error}`);
         }
       } catch (error) {
         dispatch({
@@ -47,6 +49,7 @@ const createAsyncAction = ({
           },
         });
         if (showToastOnError) {
+          console.log(error);
           Toast.error(`${response.status}: ${error.message}`);
         }
       }
@@ -62,6 +65,7 @@ const createAsyncAction = ({
         },
       });
       if (showToastOnError) {
+        console.log(error);
         Toast.error(`${response.status}: ${error.message}`);
       }
     });
@@ -70,7 +74,7 @@ const createAsyncAction = ({
       type: types.failure,
       payload: {
         code: 0,
-        message: 'Connection issue. Make sure your are connected to the internet and that your API is working',
+        message: 'Connection issue. Make sure you are connected to the internet and that your API is working',
       },
     });
     if (showToastOnError) {

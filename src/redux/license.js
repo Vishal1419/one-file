@@ -3,18 +3,31 @@ import createAsyncRequest from '../utils/async-redux.js';
 import { addLicense } from '../clients/license';
 
 export const types = {
+  SAVE_LICENSE: 'license::save',
+  FLUSH_LICENSE: 'license::flush',
   ADD_LICENSE_LOADING: 'license::add::loading',
   ADD_LICENSE_SUCCESS: 'license::add::success',
   ADD_LICENSE_FAILURE: 'license::add::failure',
 };
 
 const INITIAL_STATE = {
+  license: {},
   requestState: RequestStates.init,
   addLicenseError: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case types.SAVE_LICENSE:
+      return {
+        ...state,
+        license: action.payload,
+      };
+    case types.FLUSH_LICENSE:
+      return {
+        ...state,
+        license: {},
+      };
     case types.ADD_LICENSE_LOADING:
       return {
         ...state,
@@ -30,7 +43,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.ADD_LICENSE_FAILURE:
       return {
         ...state,
-        requestState: RequestStates.error,
+        requestState: RequestStates.failure,
         addLicenseError: action.payload.message,
       };
     default:
@@ -39,12 +52,19 @@ export default (state = INITIAL_STATE, action) => {
 };
 
 export const actions = {
-  addLicense: (name, mobile, key) => createAsyncRequest({
-    asyncRequest: addLicense.bind(null, name, mobile, key),
+  saveLicense: (name, mobile, key) => ({
+    type: types.SAVE_LICENSE,
+    payload: { name, mobile, key },
+  }),
+  flushLicense: () => ({
+    type: types.FLUSH_LICENSE,
+  }),
+  addLicense: (name, mobile, key, hdd) => createAsyncRequest({
+    asyncRequest: addLicense.bind(null, name, mobile, key, hdd),
     types: {
         success: types.ADD_LICENSE_SUCCESS,
-        error: types.ADD_LICENSE_FAILURE,
-        request: types.ADD_LICENSE_LOADING
+        failure: types.ADD_LICENSE_FAILURE,
+        loading: types.ADD_LICENSE_LOADING
     }
   }),
 };

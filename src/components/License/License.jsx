@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { reduxForm, Form, Field } from 'redux-form';
-import { FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import { FormGroup, Label, Input, Button } from 'reactstrap';
+import BlockUI from 'react-block-ui';
 
 import { noop } from '../../utils';
 
@@ -32,35 +33,48 @@ const normalizeKey = value => {
 
 const renderTextField = ({ input, meta: { touched, error }, ...custom }) => (
   <Fragment>
-      <Input {...(touched ? { valid: !error } : {})} {...input} {...custom} />
-      {touched && error && <FormFeedback>{error}</FormFeedback>}
+      <Input {...(touched ? { valid: !error, invalid: !!error } : { })} {...input} {...custom} />
+      {touched && error && <span className="error">{error}</span>}
   </Fragment>
 );
 
-const License = ({ handleSubmit, onSubmit }) => (
-  <Form onSubmit={handleSubmit(onSubmit)}>
-    <FormGroup>
-      <Label for="name">Name</Label>
-      <Field name="name" type="text" component={renderTextField} />
-    </FormGroup>
-    <FormGroup>
-      <Label for="mobile">Mobile</Label>
-      <Field name="mobile" type="text" component={renderTextField} />
-    </FormGroup>
-    <FormGroup>
-      <Label for="key">Key</Label>
-      <Field name="key" type="text" component={renderTextField} normalize={normalizeKey} />
-    </FormGroup>
-    <Button className="btn btn-primary" type="submit">Register License</Button>
-  </Form>
+const License = ({ handleSubmit, loading, onSubmit }) => (
+  <BlockUI
+    tag="div"
+    blocking={loading}
+    className="frm-license-container"
+    loader={
+      <div className="waiting-loader">
+        <i className="fas fa-spinner fa-pulse" />
+      </div>
+    }
+  >
+    <Form className="frm-license" onSubmit={handleSubmit(onSubmit)}>
+      <FormGroup>
+        <Label for="name">Name</Label>
+        <Field name="name" type="text" component={renderTextField} />
+      </FormGroup>
+      <FormGroup>
+        <Label for="mobile">Mobile</Label>
+        <Field name="mobile" type="text" component={renderTextField} />
+      </FormGroup>
+      <FormGroup>
+        <Label for="key">Key</Label>
+        <Field name="key" className="key" type="text" component={renderTextField} normalize={normalizeKey} />
+      </FormGroup>
+      <Button className="btn btn-success btn-register-license" type="submit">Register License</Button>
+    </Form>
+  </BlockUI>
 );
 
 License.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  loading: PropTypes.bool,
   onSubmit: PropTypes.func,
 };
 
 License.defaultProps = {
+  loading: false,
   onSubmit: noop,
 };
 
