@@ -1,0 +1,61 @@
+{
+  "name": "one-file",
+  "product-name": "one file",
+  "version": "3.0.0",
+  "description": "Application to convert MUNIM CSV files to a proper GST file",
+  "author": "Vishal Sherathiya",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "react-start": "cd .. && cd react && npm run start",
+    "electron-start": "set \"NODE_ENV=development\" && set \"ELECTRON_START_URL=http://127.0.0.1:3000\" && cd .. && cd electron && electron .",
+    "start": "set \"BROWSER=none\" && concurrently \"npm run react-start\" \"wait-on http://127.0.0.1:3000/ && npm run electron-start\"",
+    "dist": "set \"NODE_ENV=production\" && electron-builder"
+  },
+  "dependencies": {
+    "electron-is-dev": "^1.0.1",
+    "getmac": "^1.2.1",
+    "jsonfile": "^5.0.0",
+    "node-dbf": "^0.4.0",
+    "xlsx-populate": "^1.17.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1",
+    "electron": "^3.0.5",
+    "electron-builder": "^20.36.2",
+    "electron-devtools-installer": "^2.2.4",
+    "wait-on": "^3.1.0"
+  },
+  "build": {
+    "extends": null,
+    "asar": true,
+    "appId": "com.onefile.app",
+    "win": {
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "assets/icons/win/256x256.ico"
+    },
+    "files": [
+      {
+        "from": ".",
+        "to": ".",
+        "filter": [
+          "main.js",
+          "react-build",
+          "assets",
+          "package.json"
+        ]
+      }
+    ],
+    "extraFiles": "sample-files",
+    "directories": {
+      "buildResources": "assets/icons"
+    }
+  }
+}

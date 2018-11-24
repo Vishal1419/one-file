@@ -29,12 +29,12 @@ function createWindow() {
     height: 440,
     resizable: process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() === 'development',
     maximizable: process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() === 'development',
-    icon: path.join(__dirname, 'electron/assets/icons/win/64x64.ico'),
+    icon: path.join(__dirname, 'assets/icons/win/64x64.ico'),
   });
   mainWindow.setMenu(null);
   // and load the index.html of the app.
   const startUrl = process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() === 'production'
-    ? `file://${__dirname}/../build/index.html`
+    ? `file://${__dirname}/react-build/index.html`
     : process.env.ELECTRON_START_URL || 'http://localhost:3000';
 
   //mainWindow.loadURL(startUrl);
@@ -108,7 +108,11 @@ function createWindow() {
       if (fileNames) {
         event.sender.send('create-one-file-loading-message', 'Writing data');
         // read the template file
-        XLSX.fromFileAsync(path.join(__dirname, `../../../sample-files/${reportName}.xlsx`)).then((workbook) => {
+        XLSX.fromFileAsync(
+          process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() === 'production'
+           ? path.join(__dirname, `../../sample-files/${reportName}.xlsx`)
+           : path.join(__dirname, `sample-files/${reportName}.xlsx`)
+        ).then((workbook) => {
           event.sender.send('create-one-file-loading-message', 'writing reports');
           let count = 0;
           // loop through all the files

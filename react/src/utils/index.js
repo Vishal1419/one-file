@@ -1,7 +1,3 @@
-// import getmac from 'getmac';
-
-import * as Toast from '../components/Toaster/Toaster';
-
 export const noop = () => {};
 
 export const getBase64 = file => (
