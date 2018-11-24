@@ -8,50 +8,49 @@
   "homepage": "./",
   "main": "electron/main.js",
   "scripts": {
-    "react-start": "set \"BROWSER=none\" && react-scripts start",
-    "electron-start": "set \"ELECTRON_START_URL=http://127.0.0.1:3000\" && electron .",
-    "start": "concurrently \"npm run react-start\" \"wait-on http://127.0.0.1:3000/ && npm run electron-start\"",
+    "react-start": "react-scripts start",
+    "electron-start": "set \"NODE_ENV=development\" && set \"ELECTRON_START_URL=http://127.0.0.1:3000\" && electron .",
+    "start": " set \"BROWSER=none\" && concurrently \"npm run react-start\" \"wait-on http://127.0.0.1:3000/ && npm run electron-start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
     "dist": "set \"NODE_ENV=production\" && electron-builder",
-    "postinstall": "electron-builder install-app-deps",
     "start-build": "set \"BROWSER=none\" && set \"NODE_ENV=production\" && electron ."
   },
   "dependencies": {
-    "async": "^2.6.1",
-    "bootstrap": "^4.1.3",
-    "concurrently": "^4.0.1",
     "electron-is-dev": "^1.0.1",
     "getmac": "^1.2.1",
+    "jsonfile": "^5.0.0",
+    "node-dbf": "^0.4.0",
+    "xlsx-populate": "^1.17.0"
+  },
+  "devDependencies": {
+    "bootstrap": "^4.1.3",
+    "concurrently": "^4.0.1",
+    "electron": "^3.0.5",
+    "electron-builder": "^20.36.2",
+    "electron-devtools-installer": "^2.2.4",
     "is-electron": "^2.1.0",
     "jquery": "^3.3.1",
-    "jsonfile": "^5.0.0",
     "md5": "^2.2.1",
-    "node-dbf": "^0.4.0",
     "node-sass": "^4.9.4",
     "object-formdata-convertor": "^1.2.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.0",
     "react-block-ui": "^1.1.3",
     "react-dom": "^16.6.0",
+    "react-helmet": "^5.2.0",
     "react-redux": "^5.1.0",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.0.5",
-    "react-toastify": "^2.2.1",
+    "react-toastify": "2.2.1",
     "reactstrap": "^6.5.0",
     "redux": "^4.0.1",
     "redux-form": "^7.4.2",
     "redux-thunk": "^2.3.0",
-    "wait-on": "^3.1.0",
-    "xlsx-populate": "^1.17.0"
-  },
-  "devDependencies": {
-    "electron": "^3.0.5",
-    "electron-builder": "^20.36.2",
-    "electron-devtools-installer": "^2.2.4"
+    "wait-on": "^3.1.0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -63,13 +62,14 @@
     "win": {
       "target": [
         {
-          "target": "null",
-          "arch": ["ia32"]
+          "target": "zip",
+          "arch": [
+            "ia32"
+          ]
         }
       ],
       "icon": "electron/assets/icons/win/256x256.ico"
     },
-    "compression": "maximum",
     "files": [
       {
         "from": ".",
