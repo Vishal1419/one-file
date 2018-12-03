@@ -1,7 +1,7 @@
 {
   "name": "one-file",
   "product-name": "one file",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Application to convert MUNIM CSV files to a proper GST file",
   "author": "Vishal Sherathiya",
   "private": true,
@@ -47,6 +47,7 @@
         "to": ".",
         "filter": [
           "main.js",
+          "xlsx-generator.js",
           "react-build",
           "assets",
           "package.json"
